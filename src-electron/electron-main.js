@@ -63,7 +63,6 @@ ipcMain.handle("get-store-data", async (event, fileName, key) => {
 });
 
 ipcMain.handle("set-store-data", async (event, fileName, key, value) => {
-  console.log("set-store-data", fileName, key, value);
   const fileStore = store.getFile(fileName);
   fileStore.set(key, value);
   return true;

@@ -24,6 +24,7 @@
     "@quasar/app-vite": "^1.8.0",
     "@vue/devtools": "^7.0.25",
     "autoprefixer": "^10.4.2",
+    "dotenv": "^16.4.5",
     "electron": "^29.2.0",
     "electron-packager": "^17.1.2",
     "eslint": "^8.11.0",

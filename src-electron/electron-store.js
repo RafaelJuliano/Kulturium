@@ -1,15 +1,28 @@
 import path from "path";
-import { app, remote } from "electron";
+import { app } from "electron";
 import fs from "fs";
 
 function getFile(fileName, defaults = {}) {
-  const userDataPath = (app || remote.app).getPath("userData");
-  const filePath = path.join(userDataPath, fileName + ".json");
+  if (process.platform === "win32") {
+    const globalStoreDirPath = path.resolve(
+      process.env.APP_WINDOWS_DATA_FOLDER,
+      app.getName()
+    );
+    if (fs.existsSync(globalStoreDirPath)) {
+      app.setPath("appData", globalStoreDirPath);
+    } else {
+      try {
+        fs.mkdirSync(globalStoreDirPath, { recursive: true });
+        console.log("Folder created successfully!");
+      } catch (err) {
+        console.error("Error creating folder:", err);
+        app.setPath("appData", app.getPath("appData"));
+      }
+    }
+  }
+  const userDataPath = app.getPath("appData");
 
-  console.log({
-    userDataPath,
-    filePath,
-  });
+  const filePath = path.join(userDataPath, fileName + ".json");
 
   const data = parseDataFile(filePath, defaults);
 
