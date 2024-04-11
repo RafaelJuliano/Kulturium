@@ -1,40 +1,46 @@
 <template>
-  <q-item clickable tag="a" :href="props.link">
-    <q-item-section v-if="props.icon" avatar>
-      <q-icon :name="props.icon" />
+  <q-item clickable @click="onClick">
+    <q-item-section v-if="icon" avatar>
+      <q-icon :name="this.icon" />
     </q-item-section>
 
     <q-item-section>
-      <q-item-label>{{ props.title }}</q-item-label>
-      <q-item-label caption>{{ props.caption }}</q-item-label>
+      <q-item-label>{{ title }}</q-item-label>
+      <q-item-label caption>{{ caption }}</q-item-label>
     </q-item-section>
   </q-item>
 </template>
 
-<script setup>
-defineOptions({
+<script>
+export default {
   name: "EssentialLink",
-});
 
-const props = defineProps({
-  title: {
-    type: String,
-    required: true,
+  props: {
+    title: {
+      type: String,
+      required: true,
+    },
+
+    caption: {
+      type: String,
+      default: "",
+    },
+
+    name: {
+      type: String,
+      default: "#",
+    },
+
+    icon: {
+      type: String,
+      default: "",
+    },
   },
 
-  caption: {
-    type: String,
-    default: "",
+  methods: {
+    onClick() {
+      this.$router.push({ name: this.name });
+    },
   },
-
-  link: {
-    type: String,
-    default: "#",
-  },
-
-  icon: {
-    type: String,
-    default: "",
-  },
-});
+};
 </script>
