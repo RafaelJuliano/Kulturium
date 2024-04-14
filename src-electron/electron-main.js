@@ -3,13 +3,14 @@ import path from "path";
 import os from "os";
 import store from "./electron-store";
 import { MuseDB } from "./database/db";
+import booksApi from "./apis/books";
+import { getDb } from "./database/db-provider";
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
 
 let mainWindow;
-
-const db = new MuseDB();
+const db = getDb();
 
 function createWindow() {
   /**
@@ -60,26 +61,11 @@ app.on("activate", () => {
   }
 });
 
-// ipcMain.handle("get-store-data", async (event, fileName, key) => {
-//   const fileStore = store.getFile(fileName);
-//   return fileStore.get(key);
-// });
+ipcMain.handle(
+  booksApi.channels.SAVE,
+  booksApi.handlers[booksApi.channels.SAVE]
+);
 
-// ipcMain.handle("set-store-data", async (event, fileName, key, value) => {
-//   const fileStore = store.getFile(fileName);
-//   fileStore.set(key, value);
-//   return true;
-// });
-
-ipcMain.handle("get-store-data", async (event, fileName, key) => {
-  const result = await db.execute(
-    `SELECT * FROM test_table ORDER BY value DESC LIMIT 1`
-  );
-  return result[0]?.value || 0;
-});
-
-ipcMain.handle("set-store-data", async (event, fileName, key, value) => {
-  await db.execute(`
-    INSERT INTO test_table VALUES(${value})
-  `);
+db.initialize().then(() => {
+  console.log("Database Initialized");
 });

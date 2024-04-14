@@ -3,14 +3,13 @@ import { getSystemFolderPath } from "../electron-utils";
 import { Migrator } from "./migrator";
 
 export class MuseDB {
-  constructor() {
-    this.runMigrations().then(() => {
-      console.log("Migrations executed successfully.");
-    });
+  async initialize() {
+    this.connection = this.getConnection();
+    await this.runMigrations();
   }
 
-  async runMigrations() {
-    const migrator = await new Migrator(this.getConnection()).build();
+  async runMigrations(connection) {
+    const migrator = await new Migrator(this.connection).build();
     await migrator.up();
   }
 
@@ -28,15 +27,17 @@ export class MuseDB {
     return db;
   }
 
-  execute(query) {
+  execute(query, binds) {
+    if (!this.connection) {
+      throw new Error("Database should be initialized");
+    }
     return new Promise((resolve, reject) => {
-      const connection = this.getConnection();
-      connection.all(query, (err, row) => {
+      this.connection.all(query, binds, (err, row) => {
         if (err) {
           console.error("Failed to execute query", query, err.message);
           reject(err);
         }
-        connection.close;
+        this.connection.close;
         resolve(row);
       });
     });
