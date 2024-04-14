@@ -66,6 +66,11 @@ ipcMain.handle(
   booksApi.handlers[booksApi.channels.SAVE]
 );
 
+ipcMain.handle(
+  booksApi.channels.SEARCH_AUTHORS,
+  booksApi.handlers[booksApi.channels.SEARCH_AUTHORS]
+);
+
 db.initialize().then(() => {
   console.log("Database Initialized");
 });
