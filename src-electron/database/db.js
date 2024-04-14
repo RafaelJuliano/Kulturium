@@ -1,22 +1,22 @@
 import sqlite3 from "sqlite3";
 import { getSystemFolderPath } from "../electron-utils";
+import { Migrator } from "./migrator";
 
 export class MuseDB {
   constructor() {
-    this.runMigrations();
+    this.runMigrations().then(() => {
+      console.log("Migrations executed successfully.");
+    });
   }
 
   async runMigrations() {
-    await this.execute(`
-      CREATE TABLE IF NOT EXISTS test_table (
-        value INTEGER
-      );
-   `);
+    const migrator = await new Migrator(this.getConnection()).build();
+    await migrator.up();
   }
 
   getConnection() {
     const db = new sqlite3.Database(
-      getSystemFolderPath("database.db"),
+      getSystemFolderPath("database.sqlite"),
       (err) => {
         if (err) {
           console.error(err.message);
