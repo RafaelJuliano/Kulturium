@@ -22,30 +22,24 @@
       header-class="bg-primary text-white"
       expand-icon-class="text-white"
       ><q-list>
-        <q-item
-          v-for="link in group.pages"
-          :key="link.title"
-          v-bind="link"
-          clickable
-          @click="onClick(link.routeName)"
-        >
-          <q-item-section v-if="icon" avatar>
-            <q-icon :name="link.icon" />
-          </q-item-section>
-
-          <q-item-section>
-            <q-item-label>{{ link.title }}</q-item-label>
-            <q-item-label caption>{{ link.caption }}</q-item-label>
-          </q-item-section>
-        </q-item>
-      </q-list></q-expansion-item
-    >
+        <MenuIntem
+          v-for="page in group.pages"
+          :key="page.title"
+          v-bind="page"
+        /> </q-list
+    ></q-expansion-item>
   </q-list>
 </template>
 
 <script>
+import MenuIntem from "./MenuIntem.vue";
+
 export default {
   name: "SideMenu",
+
+  components: {
+    MenuIntem,
+  },
 
   data() {
     return {
@@ -55,7 +49,7 @@ export default {
           icon: "menu_book",
           pages: [
             {
-              title: "Novo",
+              title: "Cadastrar",
               caption: "Cadastrar novo livro",
               icon: "add_circle_outline",
               routeName: "books_create",
@@ -79,9 +73,6 @@ export default {
   },
 
   methods: {
-    onClick(routeName) {
-      this.$router.push({ name: routeName });
-    },
     toggleLeftDrawer() {
       this.$emit("toggle-left-drawer");
     },
