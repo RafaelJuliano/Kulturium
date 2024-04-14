@@ -1,5 +1,7 @@
 <template>
   <q-page class="flex flex-center flex-column">
+    <q-icon name="museum" size="10rem" color="primary" />
+
     <q-btn color="primary" @click="increment"> Incrementar </q-btn>
     <q-chip>{{ count }}</q-chip>
   </q-page>

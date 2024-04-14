@@ -18,15 +18,7 @@
     </q-header>
 
     <q-drawer v-model="leftDrawerOpen" show-if-above bordered>
-      <q-list>
-        <q-item-label header> Essential Links </q-item-label>
-
-        <EssentialLink
-          v-for="link in linksList"
-          :key="link.title"
-          v-bind="link"
-        />
-      </q-list>
+      <SideMenu @toggle-left-drawer="toggleLeftDrawer" />
     </q-drawer>
 
     <q-page-container>
@@ -35,14 +27,13 @@
   </q-layout>
 </template>
 <script>
-import { ref } from "vue";
-import EssentialLink from "components/EssentialLink.vue";
 import { version } from "../../package.json";
+import SideMenu from "components/SideMenu.vue";
 
 export default {
   name: "MainLayout",
   components: {
-    EssentialLink,
+    SideMenu,
   },
 
   data() {
