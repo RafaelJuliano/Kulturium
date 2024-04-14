@@ -38,7 +38,7 @@ const handlers = {
       data.edition,
       data.volume,
       data.year,
-      data.bumPages,
+      data.numPages,
       data.publisher,
       data.isbn,
       data.cdd,
