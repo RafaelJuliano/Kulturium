@@ -75,7 +75,7 @@ const handlers = {
 
     await getDb().execute(query, [...binds, ...upsertBinds]);
   },
-  [channels.SEARCH_AUTHORS]: async (_event, author) => {
+  [channels.SEARCH_AUTHORS]: async (_event, author = "") => {
     const query = `
       SELECT DISTINCT author FROM books WHERE author LIKE '%' || ? || '%' ORDER BY author;
     `;

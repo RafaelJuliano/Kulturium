@@ -16,27 +16,7 @@
           :rules="[(val) => (val && val.length > 0) || 'Título é obrigatório.']"
         ></q-input>
 
-        <q-select
-          filled
-          v-model="author"
-          use-input
-          hide-selected
-          fill-input
-          @filter="filterFn"
-          input-debounce="0"
-          :options="authorsOptions"
-          style="width: 250px; padding-bottom: 32px"
-          emit-value
-          map-options
-          label="Autor"
-          labelColor="primary"
-        >
-          <template v-slot:no-option>
-            <q-item>
-              <q-item-section class="text-grey"> No results </q-item-section>
-            </q-item>
-          </template>
-        </q-select>
+        <AutorSelect class="col-5" v-model="author" />
       </div>
 
       <div class="row q-gutter-sm q-my-sm justify-between">
@@ -151,8 +131,13 @@
 </template>
 
 <script>
+import AutorSelect from "src/components/AutorSelect.vue";
 export default {
   name: "BooksCreate",
+
+  components: {
+    AutorSelect,
+  },
 
   data() {
     return {
@@ -167,26 +152,7 @@ export default {
       isbn: null,
       cdd: null,
       cdu: null,
-      like: "",
-      existingAuthors: [],
-      authorFilter: null,
     };
-  },
-
-  async created() {
-    const authors = await window.booksApi.searchAuthors("");
-    this.existingAuthors = authors;
-  },
-
-  computed: {
-    authorsOptions() {
-      return this.existingAuthors
-        .filter((author) => author.toLowerCase().includes(this.authorFilter))
-        .map((author) => ({
-          label: author,
-          value: author,
-        }));
-    },
   },
 
   methods: {
@@ -221,11 +187,6 @@ export default {
       this.isbn = null;
       this.cdd = null;
       this.cdu = null;
-    },
-    filterFn(val, update, _abort) {
-      update(() => {
-        this.authorFilter = val.toLowerCase().trim();
-      });
     },
   },
 };
