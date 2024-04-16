@@ -1,5 +1,5 @@
 import sqlite3 from "sqlite3";
-import { getSystemFolderPath } from "../electron-utils";
+import { getSystemFolderPath } from "src-electron/electron-utils";
 import { Migrator } from "./migrator";
 
 export class MuseDB {
@@ -8,7 +8,7 @@ export class MuseDB {
     await this.runMigrations();
   }
 
-  async runMigrations(connection) {
+  async runMigrations() {
     const migrator = await new Migrator(this.connection).build();
     await migrator.up();
   }

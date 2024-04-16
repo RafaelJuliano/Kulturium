@@ -1,4 +1,4 @@
 import { contextBridge } from "electron";
-import booksApi from "./apis/books";
+import { booksApi } from "./apis";
 
-contextBridge.exposeInMainWorld("booksApi", booksApi.api);
+contextBridge.exposeInMainWorld("booksApi", booksApi);

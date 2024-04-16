@@ -1,10 +1,8 @@
-import { app, BrowserWindow, ipcMain, ipcRenderer } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "path";
 import os from "os";
-import store from "./electron-store";
-import { MuseDB } from "./database/db";
-import booksApi from "./apis/books";
-import { getDb } from "./database/db-provider";
+import "src-electron/handlers";
+import { getDb } from "src-electron/database/db-provider";
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -28,6 +26,10 @@ function createWindow() {
       nodeIntegration: true,
       sandbox: false,
     },
+  });
+
+  db.initialize().then(() => {
+    console.log("Database Initialized");
   });
 
   mainWindow.loadURL(process.env.APP_URL);
@@ -59,18 +61,4 @@ app.on("activate", () => {
   if (mainWindow === null) {
     createWindow();
   }
-});
-
-ipcMain.handle(
-  booksApi.channels.SAVE,
-  booksApi.handlers[booksApi.channels.SAVE]
-);
-
-ipcMain.handle(
-  booksApi.channels.SEARCH_AUTHORS,
-  booksApi.handlers[booksApi.channels.SEARCH_AUTHORS]
-);
-
-db.initialize().then(() => {
-  console.log("Database Initialized");
 });
