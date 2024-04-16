@@ -19,4 +19,15 @@ export default {
     }
     return false;
   },
+
+  async searchPublishers(publisher) {
+    if (ipcRenderer) {
+      const success = await ipcRenderer.invoke(
+        CHANNELS.BOOKS.SEARCH_PUBLISHER,
+        publisher
+      );
+      return success;
+    }
+    return false;
+  },
 };

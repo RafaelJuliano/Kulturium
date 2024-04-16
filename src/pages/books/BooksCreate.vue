@@ -20,14 +20,7 @@
       </div>
 
       <div class="row q-gutter-sm q-my-sm justify-between">
-        <q-input
-          class="col"
-          filled
-          v-model="publisher"
-          label="Editora"
-          labelColor="primary"
-          lazy-rules
-        ></q-input>
+        <PublisherSelect class="col-5" v-model="publisher" />
 
         <q-input
           class="col"
@@ -132,11 +125,13 @@
 
 <script>
 import AutorSelect from "src/components/AutorSelect.vue";
+import PublisherSelect from "src/components/PublisherSelect.vue";
 export default {
   name: "BooksCreate",
 
   components: {
     AutorSelect,
+    PublisherSelect,
   },
 
   data() {

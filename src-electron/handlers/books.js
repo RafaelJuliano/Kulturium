@@ -61,7 +61,16 @@ const searchAuthors = async (_event, author = "") => {
   return rows.map((row) => row.author);
 };
 
+const searchPublisher = async (_event, publisher = "") => {
+  const query = `
+    SELECT DISTINCT publisher FROM books WHERE publisher LIKE '%' || ? || '%' ORDER BY publisher;
+    `;
+  const rows = await getDb().execute(query, publisher);
+  return rows.map((row) => row.publisher);
+};
+
 export default {
   [CHANNELS.BOOKS.SAVE]: save,
   [CHANNELS.BOOKS.SEARCH_AUTHORS]: searchAuthors,
+  [CHANNELS.BOOKS.SEARCH_PUBLISHER]: searchPublisher,
 };
