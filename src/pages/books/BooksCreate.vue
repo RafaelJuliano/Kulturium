@@ -4,7 +4,12 @@
       <h6 class="text-primary font-bold q-my-none">Cadastrar Livro</h6>
     </div>
     <q-separator color="primary" spaced="sm"></q-separator>
-    <q-form @submit="onSubmit" @reset="onReset" class="q-gutter-md q-pa-sm">
+    <q-form
+      @submit="onSubmit"
+      @reset="onReset"
+      class="q-gutter-md q-pa-sm"
+      ref="myForm"
+    >
       <div class="row q-gutter-sm q-my-sm justify-between">
         <q-input
           class="col"
@@ -143,24 +148,40 @@ export default {
       isbn: null,
       cdd: null,
       cdu: null,
+      myForm: null,
     };
+  },
+
+  mounted() {
+    this.myForm = this.$refs.myForm;
   },
 
   methods: {
     onSubmit() {
-      window.booksApi.createBook({
-        title: this.title,
-        author: this.author,
-        publisher: this.publisher,
-        edition: this.edition,
-        volume: this.volume,
-        numPages: this.numPages,
-        year: this.year,
-        class: this.className,
-        isbn: this.isbn,
-        cdd: this.cdd,
-        cdu: this.cdu,
-      });
+      window.booksApi
+        .createBook({
+          title: this.title,
+          author: this.author,
+          publisher: this.publisher,
+          edition: this.edition,
+          volume: this.volume,
+          numPages: this.numPages,
+          year: this.year,
+          class: this.className,
+          isbn: this.isbn,
+          cdd: this.cdd,
+          cdu: this.cdu,
+        })
+        .then(() => {
+          this.$q.notify("Livro cadastrado com sucesso!");
+          this.myForm.reset();
+        })
+        .catch(() => {
+          this.$q.notify({
+            message: "Ops, algo deu errado!",
+            type: "negative",
+          });
+        });
     },
     onReset() {
       this.title = null;
