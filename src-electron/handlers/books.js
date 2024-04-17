@@ -17,18 +17,18 @@ const save = async (_event, data) => {
     "class",
   ];
   const binds = [
-    data.id,
-    data.title,
-    data.author,
-    data.edition,
-    data.volume,
-    data.year,
-    data.numPages,
-    data.publisher,
-    data.isbn,
-    data.cdd,
-    data.cdu,
-    data.class,
+    data.id?.trim(),
+    data.title?.trim(),
+    data.author?.trim().capitalize({ eachWord: true }),
+    data.edition?.trim(),
+    data.volume?.trim(),
+    data.year?.trim(),
+    data.numPages?.trim(),
+    data.publisher?.trim().capitalize({ eachWord: true }),
+    data.isbn?.trim(),
+    data.cdd?.trim(),
+    data.cdu?.trim(),
+    data.class?.trim().toUpperCase(),
   ];
 
   const upsertBinds = [];
@@ -55,7 +55,7 @@ const save = async (_event, data) => {
 
 const searchAuthors = async (_event, author = "") => {
   const query = `
-    SELECT DISTINCT author FROM books WHERE author LIKE '%' || ? || '%' ORDER BY author;
+    SELECT DISTINCT author FROM books WHERE LOWER(author) LIKE '%' || LOWER(?) || '%' ORDER BY author;
   `;
   const rows = await getDb().execute(query, author);
   return rows.map((row) => row.author);
@@ -63,14 +63,23 @@ const searchAuthors = async (_event, author = "") => {
 
 const searchPublisher = async (_event, publisher = "") => {
   const query = `
-    SELECT DISTINCT publisher FROM books WHERE publisher LIKE '%' || ? || '%' ORDER BY publisher;
+    SELECT DISTINCT publisher FROM books WHERE LOWER(publisher) LIKE '%' || LOWER(?) || '%' ORDER BY publisher;
     `;
   const rows = await getDb().execute(query, publisher);
   return rows.map((row) => row.publisher);
+};
+
+const serchClasses = async (_event, className = "") => {
+  const query = `
+    SELECT DISTINCT class FROM books WHERE LOWER(class) LIKE '%' || LOWER(?) || '%' ORDER BY class;
+    `;
+  const rows = await getDb().execute(query, className);
+  return rows.map((row) => row.class);
 };
 
 export default {
   [CHANNELS.BOOKS.SAVE]: save,
   [CHANNELS.BOOKS.SEARCH_AUTHORS]: searchAuthors,
   [CHANNELS.BOOKS.SEARCH_PUBLISHER]: searchPublisher,
+  [CHANNELS.BOOKS.SEARCH_CLASSES]: serchClasses,
 };

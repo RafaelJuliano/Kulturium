@@ -22,14 +22,7 @@
       <div class="row q-gutter-sm q-my-sm justify-between">
         <PublisherSelect class="col-5" v-model="publisher" />
 
-        <q-input
-          class="col"
-          filled
-          v-model="category"
-          label="Classe"
-          labelColor="primary"
-          lazy-rules
-        ></q-input>
+        <ClassSelect class="col" v-model="className" />
       </div>
 
       <div class="row q-gutter-sm q-my-sm">
@@ -126,12 +119,15 @@
 <script>
 import AutorSelect from "src/components/AutorSelect.vue";
 import PublisherSelect from "src/components/PublisherSelect.vue";
+import ClassSelect from "src/components/ClassSelect.vue";
+
 export default {
   name: "BooksCreate",
 
   components: {
     AutorSelect,
     PublisherSelect,
+    ClassSelect,
   },
 
   data() {
@@ -143,7 +139,7 @@ export default {
       volume: null,
       numPages: null,
       year: null,
-      category: null,
+      className: null,
       isbn: null,
       cdd: null,
       cdu: null,
@@ -151,10 +147,6 @@ export default {
   },
 
   methods: {
-    saveBook() {
-      console.log("vue create book");
-      window.booksApi.createBook({ title: "vue" });
-    },
     onSubmit() {
       window.booksApi.createBook({
         title: this.title,
@@ -164,7 +156,7 @@ export default {
         volume: this.volume,
         numPages: this.numPages,
         year: this.year,
-        class: this.category,
+        class: this.className,
         isbn: this.isbn,
         cdd: this.cdd,
         cdu: this.cdu,
@@ -178,7 +170,7 @@ export default {
       this.volume = null;
       this.numPages = null;
       this.year = null;
-      this.category = null;
+      this.className = null;
       this.isbn = null;
       this.cdd = null;
       this.cdu = null;

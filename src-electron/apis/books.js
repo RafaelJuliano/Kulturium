@@ -30,4 +30,14 @@ export default {
     }
     return false;
   },
+  async searchClasses(className) {
+    if (ipcRenderer) {
+      const success = await ipcRenderer.invoke(
+        CHANNELS.BOOKS.SEARCH_CLASSES,
+        className
+      );
+      return success;
+    }
+    return false;
+  },
 };

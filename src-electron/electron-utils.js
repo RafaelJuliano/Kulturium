@@ -23,3 +23,15 @@ export const getSystemFolderPath = (fileName) => {
   const systemFolder = app.getPath("appData");
   return path.join(systemFolder, fileName || ".");
 };
+
+Object.defineProperty(String.prototype, "capitalize", {
+  value: function ({ eachWord }) {
+    if (eachWord) {
+      return this.split(" ")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ");
+    }
+    return this.charAt(0).toUpperCase() + this.slice(1);
+  },
+  enumerable: false,
+});
