@@ -10,6 +10,18 @@
       class="q-gutter-md q-pa-sm"
       ref="myForm"
     >
+      <div class="row q-gutter-sm q-my-sm justify-end items-center">
+        <q-btn flat round color="grey" :icon="lockIcon" @click="handleLock" />
+        <q-input
+          class="col-2"
+          filled
+          v-model="id"
+          label="Registro"
+          labelColor="primary"
+          type="number"
+          :disable="isIdDisabled"
+        ></q-input>
+      </div>
       <div class="row q-gutter-sm q-my-sm justify-between">
         <q-input
           class="col"
@@ -137,6 +149,7 @@ export default {
 
   data() {
     return {
+      id: null,
       title: null,
       author: null,
       publisher: null,
@@ -149,17 +162,24 @@ export default {
       cdd: null,
       cdu: null,
       myForm: null,
+      isIdDisabled: true,
     };
   },
 
   mounted() {
     this.myForm = this.$refs.myForm;
   },
+  computed: {
+    lockIcon() {
+      return this.isIdDisabled ? "lock" : "lock_open";
+    },
+  },
 
   methods: {
     onSubmit() {
       window.booksApi
         .createBook({
+          id: this.id,
           title: this.title,
           author: this.author,
           publisher: this.publisher,
@@ -184,6 +204,7 @@ export default {
         });
     },
     onReset() {
+      this.id = null;
       this.title = null;
       this.author = null;
       this.publisher = null;
@@ -195,6 +216,9 @@ export default {
       this.isbn = null;
       this.cdd = null;
       this.cdu = null;
+    },
+    handleLock() {
+      this.isIdDisabled = !this.isIdDisabled;
     },
   },
 };
