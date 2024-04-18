@@ -166,9 +166,11 @@ export default {
     };
   },
 
-  mounted() {
+  async mounted() {
     this.myForm = this.$refs.myForm;
+    this.id = await this.getNextSequence();
   },
+
   computed: {
     lockIcon() {
       return this.isIdDisabled ? "lock" : "lock_open";
@@ -176,7 +178,15 @@ export default {
   },
 
   methods: {
-    onSubmit() {
+    async onSubmit() {
+      const idExists = await this.checkSequence();
+      if (idExists) {
+        return this.$q.notify({
+          message: `Um livro com registro ${this.id}, já existe no sistema.`,
+          type: "negative",
+        });
+      }
+      console.log(this.id);
       window.booksApi
         .createBook({
           id: this.id,
@@ -203,8 +213,8 @@ export default {
           });
         });
     },
-    onReset() {
-      this.id = null;
+    async onReset() {
+      this.id = await this.getNextSequence();
       this.title = null;
       this.author = null;
       this.publisher = null;
@@ -219,6 +229,15 @@ export default {
     },
     handleLock() {
       this.isIdDisabled = !this.isIdDisabled;
+    },
+    getSequence() {
+      return window.booksApi.getSequence();
+    },
+    async getNextSequence() {
+      return (await window.booksApi.getSequence()) + 1;
+    },
+    checkSequence() {
+      return window.booksApi.checkSequence(this.id);
     },
   },
 };

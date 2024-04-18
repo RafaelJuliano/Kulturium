@@ -40,4 +40,21 @@ export default {
     }
     return false;
   },
+  async getSequence() {
+    if (ipcRenderer) {
+      const success = await ipcRenderer.invoke(CHANNELS.BOOKS.GET_SEQUENCE);
+      return success;
+    }
+    return false;
+  },
+  async checkSequence(id) {
+    if (ipcRenderer) {
+      const success = await ipcRenderer.invoke(
+        CHANNELS.BOOKS.CHECK_SEQUENCE,
+        id
+      );
+      return success;
+    }
+    return false;
+  },
 };

@@ -1,7 +1,7 @@
 import CHANNELS from "src-electron/channels";
 import { getDb } from "src-electron/database/db-provider";
 
-const save = async (_event, data) => {
+const save = async (_event, data, upsert) => {
   const keys = [
     "id",
     "title",
@@ -17,7 +17,7 @@ const save = async (_event, data) => {
     "class",
   ];
   const binds = [
-    data.id?.trim(),
+    data.id,
     data.title?.trim(),
     data.author?.trim().capitalize({ eachWord: true }),
     data.edition?.trim(),
@@ -33,7 +33,7 @@ const save = async (_event, data) => {
 
   const upsertBinds = [];
 
-  if (data.id) {
+  if (data.id && upsert) {
     upsertBinds.push(...binds.slice(1), data.id);
   }
 
@@ -42,12 +42,18 @@ const save = async (_event, data) => {
       ${keys.join(", ")}
     )
     VALUES (${binds.map(() => "?").join()})
-    ON CONFLICT(id) DO UPDATE SET
-    ${keys
-      .slice(1)
-      .map((key) => `${key}=?`)
-      .join(", ")}
-    WHERE id = ?;
+    ${
+      upsert
+        ? `
+      ON CONFLICT(id) DO UPDATE SET
+      ${keys
+        .slice(1)
+        .map((key) => `${key}=?`)
+        .join(", ")}
+      WHERE id = ?;
+    `
+        : ""
+    }
   `;
 
   await getDb().execute(query, [...binds, ...upsertBinds]);
@@ -77,9 +83,27 @@ const serchClasses = async (_event, className = "") => {
   return rows.map((row) => row.class);
 };
 
+const getSequence = async () => {
+  const query = `
+  SELECT id FROM books ORDER BY id DESC LIMIT 1;
+  `;
+  const rows = await getDb().execute(query);
+  return rows?.at(0).id || 0;
+};
+
+const checkSequence = async (_event, id) => {
+  const query = `
+  SELECT id FROM books WHERE id = ?
+  `;
+  const rows = await getDb().execute(query, id);
+  return rows.at(0)?.id;
+};
+
 export default {
   [CHANNELS.BOOKS.SAVE]: save,
   [CHANNELS.BOOKS.SEARCH_AUTHORS]: searchAuthors,
   [CHANNELS.BOOKS.SEARCH_PUBLISHER]: searchPublisher,
   [CHANNELS.BOOKS.SEARCH_CLASSES]: serchClasses,
+  [CHANNELS.BOOKS.GET_SEQUENCE]: getSequence,
+  [CHANNELS.BOOKS.CHECK_SEQUENCE]: checkSequence,
 };
