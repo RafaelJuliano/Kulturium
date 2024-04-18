@@ -57,4 +57,12 @@ export default {
     }
     return false;
   },
+  async searchBooks(filters) {
+    console.log({ filters });
+    if (ipcRenderer) {
+      const success = await ipcRenderer.invoke(CHANNELS.BOOKS.SEARCH, filters);
+      return success;
+    }
+    return false;
+  },
 };

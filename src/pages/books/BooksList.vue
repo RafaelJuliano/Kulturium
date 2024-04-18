@@ -10,5 +10,14 @@
 <script>
 export default {
   name: "BooksList",
+
+  data() {
+    this.books = [];
+  },
+
+  async created() {
+    this.books = await window.booksApi.searchBooks({});
+    console.log(this.books);
+  },
 };
 </script>

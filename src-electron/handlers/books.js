@@ -99,6 +99,24 @@ const checkSequence = async (_event, id) => {
   return rows.at(0)?.id;
 };
 
+const search = async (_event, params) => {
+  const whereClauses = [];
+  const binds = [];
+
+  if (params.title) {
+    where.push(`LOWER(title) LIKE '%' || LOWER(?) || '%'`);
+    binds.push(params.title);
+  }
+
+  const where = whereClauses.length > 0 ? ` WHERE ${where.join(" AND ")}` : "";
+
+  const query = `
+      SELECT * FROM books
+      ${where}
+    `;
+  return getDb().execute(query, binds);
+};
+
 export default {
   [CHANNELS.BOOKS.SAVE]: save,
   [CHANNELS.BOOKS.SEARCH_AUTHORS]: searchAuthors,
@@ -106,4 +124,5 @@ export default {
   [CHANNELS.BOOKS.SEARCH_CLASSES]: serchClasses,
   [CHANNELS.BOOKS.GET_SEQUENCE]: getSequence,
   [CHANNELS.BOOKS.CHECK_SEQUENCE]: checkSequence,
+  [CHANNELS.BOOKS.SEARCH]: search,
 };
