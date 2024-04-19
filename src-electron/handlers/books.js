@@ -103,7 +103,7 @@ const search = async (_event, params) => {
   const whereClauses = [];
   const binds = [];
 
-  if (params.title) {
+  if (params?.title) {
     where.push(`LOWER(title) LIKE '%' || LOWER(?) || '%'`);
     binds.push(params.title);
   }
@@ -114,7 +114,16 @@ const search = async (_event, params) => {
       SELECT * FROM books
       ${where}
     `;
-  return getDb().execute(query, binds);
+
+  const withPaginationQuery = `
+    SELECT * FROM
+    (${query})
+    ORDER BY ${params?.sort || "id"} ${params?.descending ? "DESC" : "ASC"}
+    LIMIT ${params?.limit || 10}
+    OFFSET ${params?.offset || 0}
+  `;
+
+  return getDb().execute(withPaginationQuery, binds);
 };
 
 export default {

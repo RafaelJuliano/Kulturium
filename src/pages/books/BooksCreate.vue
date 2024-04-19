@@ -186,7 +186,6 @@ export default {
           type: "negative",
         });
       }
-      console.log(this.id);
       window.booksApi
         .createBook({
           id: this.id,
