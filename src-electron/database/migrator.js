@@ -1,10 +1,9 @@
-import fs from "fs";
-import path from "path";
+import migrations from "./migrations";
 
 export class Migrator {
   constructor(db) {
     this.db = db;
-    this.migrationsPath = path.resolve("./src-electron/database/migrations/");
+    this.migrations = migrations.sort((a, b) => a.name.localeCompare(b.name));
   }
 
   async build() {
@@ -13,14 +12,12 @@ export class Migrator {
   }
 
   async up() {
-    const files = fs.readdirSync(this.migrationsPath).sort();
-    for (const file of files) {
-      const migrationName = file.split(".")[0];
+    for (const { name, operations } of this.migrations) {
+      const migrationName = name.split(".")[0];
       const exists = await this.isMigrationExecuted(migrationName);
       if (!exists) {
-        console.log(`Applying migration: ${file}`);
-        const filePath = path.resolve(this.migrationsPath, file);
-        await this.executeMigrationFile(filePath, "up");
+        console.log(`Applying migration: ${migrationName}`);
+        await this.executeMigrationOperations(operations, "up");
         const query = `INSERT INTO migrations (migration) VALUES (?)`;
         this.db.run(query, [migrationName]);
       }
@@ -59,8 +56,7 @@ export class Migrator {
     });
   }
 
-  executeMigrationFile(filePath, operation) {
-    const migration = require(filePath);
-    return migration[operation](this.db);
+  executeMigrationOperations(operations, operation) {
+    return operations[operation](this.db);
   }
 }

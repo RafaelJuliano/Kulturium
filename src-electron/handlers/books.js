@@ -88,7 +88,7 @@ const getSequence = async () => {
   SELECT id FROM books ORDER BY id DESC LIMIT 1;
   `;
   const rows = await getDb().execute(query);
-  return rows?.at(0).id || 0;
+  return rows?.at(0)?.id || 0;
 };
 
 const checkSequence = async (_event, id) => {
