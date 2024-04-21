@@ -29,7 +29,9 @@ export default {
   },
 
   async created() {
-    this.classes = await window.booksApi.searchClasses();
+    this.classes = (await window.booksApi.searchClasses()).filter(
+      (value) => !!value
+    );
   },
 
   props: {

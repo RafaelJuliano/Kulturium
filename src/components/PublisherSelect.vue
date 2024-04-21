@@ -29,7 +29,9 @@ export default {
   },
 
   async created() {
-    this.publishers = await window.booksApi.searchPublishers();
+    this.publishers = (await window.booksApi.searchPublishers()).filter(
+      (value) => !!value
+    );
   },
 
   props: {
