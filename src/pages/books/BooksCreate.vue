@@ -14,7 +14,6 @@
         <q-btn flat round color="grey" :icon="lockIcon" @click="handleLock" />
         <q-input
           class="col-2"
-          filled
           v-model="id"
           label="Registro"
           labelColor="primary"
@@ -25,7 +24,6 @@
       <div class="row q-gutter-sm q-my-sm justify-between">
         <q-input
           class="col"
-          filled
           v-model="title"
           label="Título"
           labelColor="primary"
@@ -45,7 +43,6 @@
       <div class="row q-gutter-sm q-my-sm">
         <q-input
           class="col"
-          filled
           type="number"
           v-model="edition"
           label="Edição"
@@ -55,7 +52,6 @@
 
         <q-input
           class="col"
-          filled
           type="number"
           v-model="volume"
           label="Volume"
@@ -65,7 +61,6 @@
 
         <q-input
           class="col"
-          filled
           type="number"
           v-model="year"
           label="Ano"
@@ -79,7 +74,6 @@
 
         <q-input
           class="col-4"
-          filled
           type="number"
           v-model="numPages"
           label="Número de páginas"
@@ -91,7 +85,6 @@
       <div class="row q-gutter-sm q-my-sm">
         <q-input
           class="col"
-          filled
           type="text"
           v-model="isbn"
           label="ISBN"
@@ -101,7 +94,6 @@
 
         <q-input
           class="col"
-          filled
           type="text"
           v-model="cdd"
           label="CDD"
@@ -111,7 +103,6 @@
 
         <q-input
           class="col"
-          filled
           type="text"
           v-model="cdu"
           label="CDU"

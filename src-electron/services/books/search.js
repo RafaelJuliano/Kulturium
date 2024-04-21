@@ -15,6 +15,21 @@ export const search = async (_event, params) => {
     binds.push(...Array(5).fill(params.like));
   }
 
+  if (params?.author) {
+    whereClauses.push(`author = ?`);
+    binds.push(params.author);
+  }
+
+  if (params?.publisher) {
+    whereClauses.push(`publisher = ?`);
+    binds.push(params.publisher);
+  }
+
+  if (params?.class) {
+    whereClauses.push(`class = ?`);
+    binds.push(params.class);
+  }
+
   const where =
     whereClauses.length > 0 ? ` WHERE ${whereClauses.join(" AND ")}` : "";
 

@@ -1,6 +1,5 @@
 <template>
   <q-select
-    filled
     :selected="value"
     use-input
     hide-selected
@@ -14,6 +13,14 @@
     @filter="filterFn"
     @input-value="onInput"
   >
+    <template v-slot:append>
+      <q-icon
+        v-if="showClearButton"
+        name="close"
+        @click.stop.prevent="onInput('')"
+        class="cursor-pointer"
+      ></q-icon>
+    </template>
   </q-select>
 </template>
 
@@ -25,6 +32,7 @@ export default {
     return {
       options: [],
       publishers: [],
+      showClearButton: false,
     };
   },
 
@@ -43,6 +51,7 @@ export default {
   methods: {
     onInput(val) {
       this.$emit("update:modelValue", val);
+      this.showClearButton = val !== "";
     },
     filterFn(val, update) {
       update(() => {

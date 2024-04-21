@@ -4,24 +4,15 @@
       <h6 class="text-primary font-bold q-my-none">Pesquisar Livros</h6>
     </div>
     <q-separator color="primary"></q-separator>
+
     <div class="q-pa-md">
-      <q-table
-        :rows="books"
-        :columns="columns"
-        row-key="name"
-        v-model:pagination="pagination"
-        flat
-        bordered
-        rows-per-page-label="itens por pagina:"
-        no-data-label="Nenhum livro encontrado com os critérios de busca."
-        :visible-columns="visibleColumns"
-        @request="onRequest"
-      >
-        <template v-slot:top>
+      <q-card flat bordered class="my-card q-pa-md">
+        <div class="row q-gutter-sm q-my-sm q-mx-none">
           <q-input
-            class="col-4"
+            class="col"
             v-model="searchFilter"
             label="Pesquisar"
+            label-color="primary"
             debounce="500"
           ></q-input>
 
@@ -41,6 +32,31 @@
             options-cover
             style="min-width: 150px"
           ></q-select>
+        </div>
+        <div class="row q-gutter-sm q-my-sm q-mx-none">
+          <AutorSelect class="col" v-model="authorFilter" />
+          <PublisherSelect class="col" v-model="publisherFilter" />
+          <ClassSelect class="col" v-model="classFilter" />
+        </div>
+      </q-card>
+    </div>
+    <div class="q-pa-md">
+      <q-table
+        :rows="books"
+        :columns="columns"
+        row-key="name"
+        v-model:pagination="pagination"
+        flat
+        bordered
+        rows-per-page-label="itens por pagina:"
+        no-data-label="Nenhum livro encontrado com os critérios de busca."
+        loading-label="Carregando..."
+        :visible-columns="visibleColumns"
+        :loading="isLoading"
+        @request="onRequest"
+      >
+        <template v-slot:loading>
+          <q-inner-loading showing color="primary"></q-inner-loading>
         </template>
       </q-table>
     </div>
@@ -48,8 +64,18 @@
 </template>
 
 <script>
+import AutorSelect from "src/components/AutorSelect.vue";
+import PublisherSelect from "src/components/PublisherSelect.vue";
+import ClassSelect from "src/components/ClassSelect.vue";
+
 export default {
   name: "BooksList",
+
+  components: {
+    AutorSelect,
+    PublisherSelect,
+    ClassSelect,
+  },
 
   data() {
     return {
@@ -161,6 +187,10 @@ export default {
       },
       visibleColumns: ["id", "title", "author", "publisher", "class"],
       searchFilter: "",
+      authorFilter: "",
+      publisherFilter: "",
+      classFilter: "",
+      isLoading: false,
     };
   },
 
@@ -173,12 +203,16 @@ export default {
       this.fetchBooks(props.pagination);
     },
     async fetchBooks(paginationParams = this.pagination) {
+      this.isLoading = true;
       const { data, totalItems } = await window.booksApi.searchBooks({
         sort: paginationParams.sortBy,
         limit: paginationParams.rowsPerPage,
         offset: paginationParams.rowsPerPage * (paginationParams.page - 1),
         descending: paginationParams.descending,
         like: this.searchFilter,
+        author: this.authorFilter,
+        publisher: this.publisherFilter,
+        class: this.classFilter,
       });
 
       this.books = data;
@@ -186,10 +220,20 @@ export default {
         ...paginationParams,
         rowsNumber: totalItems,
       };
+      this.isLoading = false;
     },
   },
   watch: {
     searchFilter() {
+      this.fetchBooks();
+    },
+    authorFilter() {
+      this.fetchBooks();
+    },
+    publisherFilter() {
+      this.fetchBooks();
+    },
+    classFilter() {
       this.fetchBooks();
     },
   },
