@@ -103,16 +103,28 @@ const search = async (_event, params) => {
   const whereClauses = [];
   const binds = [];
 
-  if (params?.title) {
-    where.push(`LOWER(title) LIKE '%' || LOWER(?) || '%'`);
-    binds.push(params.title);
+  if (params?.like) {
+    whereClauses.push(`(
+    id LIKE '%' || ? || '%'
+    OR LOWER(title) LIKE '%' || LOWER(?) || '%'
+    OR LOWER(isbn) LIKE '%' || LOWER(?) || '%'
+    OR LOWER(cdd) LIKE '%' || LOWER(?) || '%'
+    OR LOWER(cdu) LIKE '%' || LOWER(?) || '%'
+    )`);
+    binds.push(...Array(5).fill(params.like));
   }
 
-  const where = whereClauses.length > 0 ? ` WHERE ${where.join(" AND ")}` : "";
+  const where =
+    whereClauses.length > 0 ? ` WHERE ${whereClauses.join(" AND ")}` : "";
 
   const query = `
       SELECT * FROM books
       ${where}
+    `;
+
+  const countQuery = `
+      SELECT count(id) as count FROM
+      (${query})
     `;
 
   const withPaginationQuery = `
@@ -123,7 +135,12 @@ const search = async (_event, params) => {
     OFFSET ${params?.offset || 0}
   `;
 
-  return getDb().execute(withPaginationQuery, binds);
+  console.log(query, binds);
+
+  return {
+    totalItems: (await getDb().execute(countQuery, binds))[0].count,
+    data: await getDb().execute(withPaginationQuery, binds),
+  };
 };
 
 export default {
