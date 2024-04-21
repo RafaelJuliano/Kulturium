@@ -22,7 +22,7 @@ export const save = async (_event, data, upsert) => {
     data.edition?.trim(),
     data.volume?.trim(),
     data.year?.trim(),
-    data.numPages?.trim(),
+    data.num_pages?.trim(),
     data.publisher?.trim().capitalize({ eachWord: true }),
     data.isbn?.trim(),
     data.cdd?.trim(),

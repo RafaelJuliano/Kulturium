@@ -54,6 +54,7 @@
         :visible-columns="visibleColumns"
         :loading="isLoading"
         @request="onRequest"
+        @row-click="onRowClick"
       >
         <template v-slot:loading>
           <q-inner-loading showing color="primary"></q-inner-loading>
@@ -208,7 +209,7 @@ export default {
         sort: paginationParams.sortBy,
         limit: paginationParams.rowsPerPage,
         offset: paginationParams.rowsPerPage * (paginationParams.page - 1),
-        descending: paginationParams.descending,
+        descending: !!paginationParams.sortBy && paginationParams.descending,
         like: this.searchFilter,
         author: this.authorFilter,
         publisher: this.publisherFilter,
@@ -218,9 +219,13 @@ export default {
       this.books = data;
       this.pagination = {
         ...paginationParams,
+        descending: !!paginationParams.sortBy && paginationParams.descending,
         rowsNumber: totalItems,
       };
       this.isLoading = false;
+    },
+    onRowClick(_event, row) {
+      this.$router.push({ name: "books_show", params: { id: row.id } });
     },
   },
   watch: {

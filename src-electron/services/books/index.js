@@ -1,5 +1,6 @@
 import { save } from "./save";
 import { search } from "./search";
+import { get } from "./get";
 import { searchAuthors } from "./searchAuthors";
 import { searchClasses } from "./searchClasses";
 import { searchPublishers } from "./searchPublishers";
@@ -9,6 +10,7 @@ import { getSequence } from "./getSequence";
 export {
   save,
   search,
+  get,
   searchAuthors,
   searchClasses,
   searchPublishers,

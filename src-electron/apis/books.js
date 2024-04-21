@@ -64,4 +64,11 @@ export default {
     }
     return false;
   },
+  async lookupBook(id) {
+    if (ipcRenderer) {
+      const success = await ipcRenderer.invoke(CHANNELS.BOOKS.LOOKUP, id);
+      return success;
+    }
+    return false;
+  },
 };
