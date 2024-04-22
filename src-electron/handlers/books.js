@@ -9,6 +9,7 @@ import {
   getSequence,
   checkSequence,
   deleteBook,
+  importBook,
 } from "src-electron/services/books";
 
 export default {
@@ -21,4 +22,5 @@ export default {
   [CHANNELS.BOOKS.GET_SEQUENCE]: getSequence,
   [CHANNELS.BOOKS.CHECK_SEQUENCE]: checkSequence,
   [CHANNELS.BOOKS.DELETE]: deleteBook,
+  [CHANNELS.BOOKS.IMPORT]: importBook,
 };

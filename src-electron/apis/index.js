@@ -1,3 +1,4 @@
 import booksApi from "./books";
+import mainApi from "./main";
 
-export { booksApi };
+export { booksApi, mainApi };

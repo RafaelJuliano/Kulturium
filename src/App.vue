@@ -2,8 +2,14 @@
   <router-view />
 </template>
 
-<script setup>
-defineOptions({
-  name: 'App'
-});
+<script>
+export default {
+  name: "App",
+
+  mounted() {
+    window.mainAPI.messages((_event, message) => {
+      this.$q.notify(message);
+    });
+  },
+};
 </script>

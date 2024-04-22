@@ -8,4 +8,5 @@ export default {
   SEARCH: "BOOKS_SEARCH",
   LOOKUP: "BOOKS_LOOCKUP",
   DELETE: "BOOKS_DELETE",
+  IMPORT: "BOOKS_IMPORT",
 };

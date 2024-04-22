@@ -1,5 +1,5 @@
 import path from "path";
-import { app } from "electron";
+import { app, ipcRenderer } from "electron";
 import fs from "fs";
 
 export const getSystemFolderPath = (fileName) => {
@@ -23,6 +23,14 @@ export const getSystemFolderPath = (fileName) => {
   const systemFolder = app.getPath("appData");
   console.log({ systemFolder });
   return path.join(systemFolder, fileName || ".");
+};
+
+export const safeIpcInvoke = async (channel, ...args) => {
+  if (ipcRenderer) {
+    const success = await ipcRenderer.invoke(channel, ...args);
+    return success;
+  }
+  return false;
 };
 
 Object.defineProperty(String.prototype, "capitalize", {

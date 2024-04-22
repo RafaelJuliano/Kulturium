@@ -7,6 +7,7 @@ import { searchPublishers } from "./searchPublishers";
 import { checkSequence } from "./checkSequence";
 import { getSequence } from "./getSequence";
 import { deleteBook } from "./deleteBook";
+import { importBook } from "./importBooks";
 
 export {
   save,
@@ -18,4 +19,5 @@ export {
   checkSequence,
   getSequence,
   deleteBook,
+  importBook,
 };
