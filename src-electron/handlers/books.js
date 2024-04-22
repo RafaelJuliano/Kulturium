@@ -10,6 +10,7 @@ import {
   checkSequence,
   deleteBook,
   importBook,
+  downloadCsvExample,
 } from "src-electron/services/books";
 
 export default {
@@ -23,4 +24,5 @@ export default {
   [CHANNELS.BOOKS.CHECK_SEQUENCE]: checkSequence,
   [CHANNELS.BOOKS.DELETE]: deleteBook,
   [CHANNELS.BOOKS.IMPORT]: importBook,
+  [CHANNELS.BOOKS.DOWNLOAD_CSV_EXAMPLE]: downloadCsvExample,
 };

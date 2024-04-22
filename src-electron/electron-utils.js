@@ -21,7 +21,6 @@ export const getSystemFolderPath = (fileName) => {
     }
   }
   const systemFolder = app.getPath("appData");
-  console.log({ systemFolder });
   return path.join(systemFolder, fileName || ".");
 };
 

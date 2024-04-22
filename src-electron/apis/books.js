@@ -38,4 +38,7 @@ export default {
     };
     reader.readAsText(file);
   },
+  async downloadCsvExample() {
+    return safeIpcInvoke(CHANNELS.BOOKS.DOWNLOAD_CSV_EXAMPLE);
+  },
 };

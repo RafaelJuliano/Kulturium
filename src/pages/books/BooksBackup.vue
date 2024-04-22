@@ -8,6 +8,7 @@
     <q-separator color="primary"></q-separator>
     <div class="q-pa-md">
       <q-card flat bordered class="my-card q-pa-md">
+        <text-h5 class="text-h5 text-primary" color="primary">Importar</text-h5>
         <q-form @submit="sendFileToElectron" class="flex column">
           <q-file
             v-model="uploadedFile"
@@ -27,9 +28,18 @@
               </div>
             </template>
           </q-file>
-          <q-btn :disable="!uploadedFile" type="submit" color="primary"
+          <q-btn
+            :disable="!uploadedFile"
+            type="submit"
+            color="primary"
+            class="q-my-sm"
             >Iniciar importação</q-btn
           >
+          <q-btn class="q-my-sm" @click="downloadExample">Baixar Exemplo</q-btn>
+          <q-banner class="q-my-none text-grey-6" dense inline-actions>
+            Certifique-se de que o arquivo importado siga o mesmo formato
+            fornecido no exemplo.
+          </q-banner>
         </q-form>
       </q-card>
     </div>
@@ -55,6 +65,17 @@ export default {
         message: "O arquivo deve ser do tipo CSV e não deve ultrapassar 2Mb!",
         type: "negative",
       });
+    },
+    async downloadExample() {
+      const doc = await window.booksApi.downloadCsvExample();
+      const blob = new Blob([doc], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "exemplo-livros.csv";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
     },
   },
 };
