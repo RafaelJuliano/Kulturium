@@ -33,10 +33,12 @@ export default {
   async importBook(file) {
     const reader = new FileReader();
     reader.onload = () => {
-      const fileContent = reader.result;
+      const buffer = reader.result;
+      const decoder = new TextDecoder("iso-8859-1");
+      const fileContent = decoder.decode(buffer);
       return safeIpcInvoke(CHANNELS.BOOKS.IMPORT, fileContent);
     };
-    reader.readAsText(file);
+    reader.readAsArrayBuffer(file);
   },
   async downloadCsvExample() {
     return safeIpcInvoke(CHANNELS.BOOKS.DOWNLOAD_CSV_EXAMPLE);

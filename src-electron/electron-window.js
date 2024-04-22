@@ -38,7 +38,6 @@ export function createWindow() {
 }
 
 export function sendToRenderer(channel, message) {
-  console.log(channel, message);
   if (mainWindow && !mainWindow.isDestroyed()) {
     mainWindow.webContents.send(channel, message);
   }

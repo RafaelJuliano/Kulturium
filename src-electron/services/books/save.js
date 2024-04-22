@@ -30,12 +30,6 @@ export const save = async (_event, data, isUpsert) => {
     data.class?.trim().toUpperCase(),
   ];
 
-  const upsertBinds = [];
-
-  if (data.id && isUpsert) {
-    upsertBinds.push(...binds.slice(1), data.id);
-  }
-
   const query = `
     INSERT INTO books (
       ${keys.join(", ")}
@@ -47,13 +41,13 @@ export const save = async (_event, data, isUpsert) => {
       ON CONFLICT(id) DO UPDATE SET
       ${keys
         .slice(1)
-        .map((key) => `${key}=?`)
+        .map((key) => `${key}=excluded.${key}`)
         .join(", ")}
-      WHERE id = ?;
+      WHERE id = excluded.id;
     `
         : ""
     }
   `;
 
-  await getDb().execute(query, [...binds, ...upsertBinds]);
+  await getDb().execute(query, binds);
 };

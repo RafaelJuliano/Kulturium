@@ -1,6 +1,7 @@
 import { parse } from "csv-parse";
 import { sendToRenderer } from "app/src-electron/electron-window";
 import CHANNELS from "app/src-electron/channels";
+import { getDb } from "src-electron/database/db-provider";
 
 export const importBook = async (_event, fileContent) => {
   parse(fileContent, async (err, data) => {
@@ -19,5 +20,74 @@ export const importBook = async (_event, fileContent) => {
       Você será notificado quando finalizado.
       `
     );
+    batchCreate(data.slice(1));
   });
+};
+
+const batchCreate = async (data) => {
+  const chunkedData = chunkArray(data, 100); // Divide os dados em chunks de 100
+  const operationsList = [];
+
+  chunkedData.forEach((chunk) => {
+    const { query, binds } = buildInsertQuery(chunk);
+
+    operationsList.push([query, binds.flat()]);
+  });
+
+  try {
+    await getDb().batchExecute(operationsList);
+    sendToRenderer(
+      CHANNELS.MAIN.MESSAGES,
+      `
+      Importação de livros concluída com sucesso!
+      `
+    );
+  } catch {
+    sendToRenderer(CHANNELS.MAIN.MESSAGES, {
+      message: "Não foi possível concluir a importação dos dados!",
+      type: "negative",
+    });
+  }
+};
+
+const chunkArray = (array, chunkSize) => {
+  const result = [];
+  for (let i = 0; i < array.length; i += chunkSize) {
+    const chunk = array.slice(i, i + chunkSize);
+    result.push(chunk);
+  }
+  return result;
+};
+
+const buildInsertQuery = (data) => {
+  const keys = [
+    "id",
+    "title",
+    "author",
+    "edition",
+    "volume",
+    "year",
+    "num_pages",
+    "publisher",
+    "isbn",
+    "cdd",
+    "cdu",
+    "class",
+  ];
+  const rows = data.map(() => `(${keys.map(() => "?").join()})\n`).join();
+  const query = `
+    INSERT INTO books
+      (${keys.join(", ")})
+    VALUES
+      ${rows}
+    ON CONFLICT(id) DO UPDATE SET
+      ${keys
+        .slice(1)
+        .map((key) => `${key}=excluded.${key}`)
+        .join(", ")}
+    WHERE id = excluded.id;
+    `;
+  const binds = data.flat();
+
+  return { query, binds };
 };
