@@ -14,7 +14,12 @@
       <div v-if="readonly" id="teste" class="row">
         <div>
           <q-btn label="Editar" color="primary" @click="changeState"></q-btn>
-          <q-btn label="Deletar" color="negative" class="q-ml-sm"></q-btn>
+          <q-btn
+            label="Deletar"
+            color="negative"
+            class="q-ml-sm"
+            @click="deleteBook = true"
+          ></q-btn>
         </div>
         <q-btn
           label="Voltar"
@@ -35,6 +40,29 @@
         ></q-btn>
       </div>
     </BookForm>
+    <q-dialog v-model="deleteBook" persistent>
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="primary" text-color="white"></q-avatar>
+          <span class="q-ml-sm"
+            >Tem certeza que deseja apagar o livro:
+            <strong>{{ selectedBook.title }}</strong>
+            ?</span
+          >
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn flat label="Cancelar" color="primary" v-close-popup></q-btn>
+          <q-btn
+            flat
+            label="Sim"
+            color="primary"
+            v-close-popup
+            @click="onDelete"
+          ></q-btn>
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -50,6 +78,7 @@ export default {
     return {
       selectedBook: {},
       readonly: true,
+      deleteBook: false,
     };
   },
   async mounted() {
@@ -70,6 +99,18 @@ export default {
     },
     onBookUpdated() {
       this.fetchBookData();
+    },
+    async onDelete() {
+      try {
+        await window.booksApi.deleteBook(this.selectedBook.id);
+        this.$q.notify(`Livro deletado com sucesso!`);
+        this.goBack();
+      } catch {
+        this.$q.notify({
+          message: "Ops, algo deu errado!",
+          type: "negative",
+        });
+      }
     },
   },
 };

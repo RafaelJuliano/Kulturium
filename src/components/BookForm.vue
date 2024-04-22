@@ -237,7 +237,7 @@ export default {
         });
       }
       try {
-        window.booksApi.saveBook({ ...this.book }, this.isUpdate);
+        await window.booksApi.saveBook({ ...this.book }, this.isUpdate);
         this.$q.notify(
           `Livro ${this.isUpdate ? "atualizado" : "cadastrado"} com sucesso!`
         );
