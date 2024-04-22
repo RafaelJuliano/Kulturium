@@ -1,6 +1,6 @@
 import { getDb } from "src-electron/database/db-provider";
 
-export const save = async (_event, data, upsert) => {
+export const save = async (_event, data, isUpsert) => {
   const keys = [
     "id",
     "title",
@@ -19,10 +19,10 @@ export const save = async (_event, data, upsert) => {
     data.id,
     data.title?.trim(),
     data.author?.trim().capitalize({ eachWord: true }),
-    data.edition?.trim(),
-    data.volume?.trim(),
-    data.year?.trim(),
-    data.num_pages?.trim(),
+    data.edition,
+    data.volume,
+    data.year,
+    data.num_pages,
     data.publisher?.trim().capitalize({ eachWord: true }),
     data.isbn?.trim(),
     data.cdd?.trim(),
@@ -32,7 +32,7 @@ export const save = async (_event, data, upsert) => {
 
   const upsertBinds = [];
 
-  if (data.id && upsert) {
+  if (data.id && isUpsert) {
     upsertBinds.push(...binds.slice(1), data.id);
   }
 
@@ -42,7 +42,7 @@ export const save = async (_event, data, upsert) => {
     )
     VALUES (${binds.map(() => "?").join()})
     ${
-      upsert
+      isUpsert
         ? `
       ON CONFLICT(id) DO UPDATE SET
       ${keys

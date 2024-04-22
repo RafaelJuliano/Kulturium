@@ -7,7 +7,7 @@
   >
     <div class="row q-gutter-sm q-my-sm justify-end items-center">
       <q-btn
-        v-if="!blockId"
+        v-if="!isUpdate"
         flat
         round
         color="grey"
@@ -45,7 +45,7 @@
         :readonly="readonly"
       />
 
-      <ClassSelect class="col" v-model="book.className" :readonly="readonly" />
+      <ClassSelect class="col" v-model="book.class" :readonly="readonly" />
     </div>
 
     <div class="row q-gutter-sm q-my-sm">
@@ -126,15 +126,7 @@
     </div>
 
     <div>
-      <q-btn label="Salvar" type="submit" color="primary"></q-btn>
-      <q-btn
-        label="Limpar"
-        type="reset"
-        color="primary"
-        flat
-        class="q-ml-sm"
-        :readonly="readonly"
-      ></q-btn>
+      <slot></slot>
     </div>
   </q-form>
 </template>
@@ -208,7 +200,7 @@ export default {
       type: Boolean,
       default: false,
     },
-    blockId: {
+    isUpdate: {
       type: Boolean,
       default: false,
     },
@@ -238,37 +230,25 @@ export default {
   methods: {
     async onSubmit() {
       const idExists = await this.checkSequence();
-      if (idExists) {
+      if (idExists && !this.isUpdate) {
         return this.$q.notify({
           message: `Um livro com registro ${this.book.id}, já existe no sistema.`,
           type: "negative",
         });
       }
-      window.booksApi
-        .createBook({
-          id: this.book.id,
-          title: this.book.title,
-          author: this.book.author,
-          publisher: this.book.publisher,
-          edition: this.book.edition,
-          volume: this.book.volume,
-          num_pages: this.book.num_pages,
-          year: this.book.year,
-          class: this.book.className,
-          isbn: this.book.isbn,
-          cdd: this.book.cdd,
-          cdu: this.book.cdu,
-        })
-        .then(() => {
-          this.$q.notify("Livro cadastrado com sucesso!");
-          this.myForm.reset();
-        })
-        .catch(() => {
-          this.$q.notify({
-            message: "Ops, algo deu errado!",
-            type: "negative",
-          });
+      try {
+        window.booksApi.saveBook({ ...this.book }, this.isUpdate);
+        this.$q.notify(
+          `Livro ${this.isUpdate ? "atualizado" : "cadastrado"} com sucesso!`
+        );
+        this.myForm.reset();
+        if (this.isUpdate) this.$emit("bookUpdated", { ...this.book });
+      } catch {
+        this.$q.notify({
+          message: "Ops, algo deu errado!",
+          type: "negative",
         });
+      }
     },
     async onReset() {
       this.book = {
@@ -285,14 +265,14 @@ export default {
     async getId() {
       return this.initialData?.id || (await window.booksApi.getSequence()) + 1;
     },
-    checkSequence() {
+    checkSequence(id) {
       return window.booksApi.checkSequence(this.book.id);
     },
   },
 
   watch: {
     initialData() {
-      this.book = this.initialData;
+      this.book = { ...this.initialData };
     },
   },
 };

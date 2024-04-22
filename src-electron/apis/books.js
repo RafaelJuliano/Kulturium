@@ -2,9 +2,13 @@ import { ipcRenderer } from "electron";
 import CHANNELS from "src-electron/channels";
 
 export default {
-  async createBook(data) {
+  async saveBook(data, isUpsert) {
     if (ipcRenderer) {
-      const success = await ipcRenderer.invoke(CHANNELS.BOOKS.SAVE, data);
+      const success = await ipcRenderer.invoke(
+        CHANNELS.BOOKS.SAVE,
+        data,
+        isUpsert
+      );
       return success;
     }
     return false;

@@ -10,12 +10,13 @@
     map-options
     label="Classe"
     labelColor="primary"
+    :readonly="readonly"
     @filter="filterFn"
     @input-value="onInput"
   >
     <template v-slot:append>
       <q-icon
-        v-if="showClearButton"
+        v-if="showClearButton && !readonly"
         name="close"
         @click.stop.prevent="onInput('')"
         class="cursor-pointer"
@@ -46,6 +47,10 @@ export default {
     value: {
       type: String,
       default: "",
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
     },
   },
   methods: {

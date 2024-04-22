@@ -4,7 +4,16 @@
       <h6 class="text-primary font-bold q-my-none">Cadastrar Livro</h6>
     </div>
     <q-separator color="primary" spaced="sm"></q-separator>
-    <BookForm />
+    <BookForm>
+      <q-btn label="Salvar" type="submit" color="primary"></q-btn>
+      <q-btn
+        label="Limpar"
+        type="reset"
+        color="primary"
+        flat
+        class="q-ml-sm"
+      ></q-btn>
+    </BookForm>
   </q-page>
 </template>
 
@@ -16,25 +25,6 @@ export default {
 
   components: {
     BookForm,
-  },
-
-  data() {
-    return {
-      id: null,
-      title: null,
-      author: null,
-      publisher: null,
-      edition: null,
-      volume: null,
-      num_pages: null,
-      year: null,
-      className: null,
-      isbn: null,
-      cdd: null,
-      cdu: null,
-      myForm: null,
-      isIdDisabled: true,
-    };
   },
 };
 </script>
