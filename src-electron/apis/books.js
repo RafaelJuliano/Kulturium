@@ -31,10 +31,11 @@ export default {
     return safeIpcInvoke(CHANNELS.BOOKS.DELETE, id);
   },
   async importBook(file) {
+    console.log(file);
     const reader = new FileReader();
     reader.onload = () => {
       const buffer = reader.result;
-      const decoder = new TextDecoder("iso-8859-1");
+      const decoder = new TextDecoder("utf-8");
       const fileContent = decoder.decode(buffer);
       return safeIpcInvoke(CHANNELS.BOOKS.IMPORT, fileContent);
     };

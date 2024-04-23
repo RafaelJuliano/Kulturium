@@ -25,7 +25,8 @@ export const importBook = async (_event, fileContent) => {
 };
 
 const batchCreate = async (data) => {
-  const chunkedData = chunkArray(data, 100); // Divide os dados em chunks de 100
+  const cleanedData = clearData(data);
+  const chunkedData = chunkArray(cleanedData, 100);
   const operationsList = [];
 
   chunkedData.forEach((chunk) => {
@@ -48,6 +49,12 @@ const batchCreate = async (data) => {
       type: "negative",
     });
   }
+};
+
+const clearData = (data) => {
+  return data
+    .filter((row) => row.length >= 12 && !!row[0] && !!row[1])
+    .map((row) => row.slice(0, 12));
 };
 
 const chunkArray = (array, chunkSize) => {
