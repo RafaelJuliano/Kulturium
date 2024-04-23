@@ -9,7 +9,7 @@
     <div class="q-pa-md">
       <q-card flat bordered class="my-card q-pa-md">
         <text-h5 class="text-h5 text-primary" color="primary">Importar</text-h5>
-        <q-form @submit="sendFileToElectron" class="flex column">
+        <q-form @submit="sendFileToElectron" class="flex column q-mt-md">
           <q-file
             v-model="uploadedFile"
             accept=".csv"
@@ -42,6 +42,24 @@
           </q-banner>
         </q-form>
       </q-card>
+
+      <q-separator class="q-my-md"></q-separator>
+
+      <q-card flat bordered class="my-card q-pa-md">
+        <text-h5 class="text-h5 text-primary" color="primary">Exportar</text-h5>
+        <div class="flex column q-mt-md">
+          <q-select
+            v-model="selectedBookType"
+            :options="bookTypeOptions"
+            label="Escolha o formato de arquivo"
+            outlined
+            dense
+          />
+          <q-btn class="q-my-sm" color="primary" @click="download"
+            >Baixar Livros</q-btn
+          >
+        </div>
+      </q-card>
     </div>
   </q-page>
 </template>
@@ -52,6 +70,11 @@ export default {
   data() {
     return {
       uploadedFile: null,
+      selectedBookType: { label: "Planilha do Excel - XLSX", value: "xlsx" },
+      bookTypeOptions: [
+        { label: "Planilha do Excel - XLSX", value: "xlsx" },
+        { label: "Valores separados por vírgula - CSV", value: "csv" },
+      ],
     };
   },
   methods: {
@@ -68,11 +91,22 @@ export default {
     },
     async downloadExample() {
       const doc = await window.booksApi.downloadCsvExample();
-      const blob = new Blob([doc], { type: "text/csv;charset=utf-8;" });
+      this.createDownloadFileLink(doc, "exemplo-importacao-livros.csv");
+    },
+    async download() {
+      const type = this.selectedBookType.value;
+      const doc = await window.booksApi.downloadBooks(type);
+      this.createDownloadFileLink(
+        doc,
+        `backup-livros-${new Date().getTime()}.${type.toLowerCase()}`
+      );
+    },
+    createDownloadFileLink(file, name) {
+      const blob = new Blob([file], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "exemplo-livros.csv";
+      a.download = name;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);

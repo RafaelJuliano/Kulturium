@@ -9,6 +9,7 @@ import { getSequence } from "./getSequence";
 import { deleteBook } from "./deleteBook";
 import { importBook } from "./importBooks";
 import { downloadCsvExample } from "./downloadCsvExample";
+import { downloadBooks } from "./downloadBooks";
 
 export {
   save,
@@ -22,4 +23,5 @@ export {
   deleteBook,
   importBook,
   downloadCsvExample,
+  downloadBooks,
 };

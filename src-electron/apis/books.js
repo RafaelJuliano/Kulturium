@@ -44,4 +44,7 @@ export default {
   async downloadCsvExample() {
     return safeIpcInvoke(CHANNELS.BOOKS.DOWNLOAD_CSV_EXAMPLE);
   },
+  async downloadBooks(type = "xlsx") {
+    return safeIpcInvoke(CHANNELS.BOOKS.DOWNLOAD, type);
+  },
 };
