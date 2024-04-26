@@ -42,3 +42,9 @@ export function sendToRenderer(channel, message) {
     mainWindow.webContents.send(channel, message);
   }
 }
+
+export function handleActivate() {
+  if (mainWindow === null) {
+    createWindow();
+  }
+}

@@ -1,5 +1,6 @@
 <template>
   <q-select
+    :filled="filled"
     :selected="value"
     use-input
     hide-selected
@@ -52,7 +53,12 @@ export default {
       type: Boolean,
       default: false,
     },
+    filled: {
+      type: Boolean,
+      default: false,
+    },
   },
+
   methods: {
     onInput(val) {
       this.$emit("update:modelValue", val);

@@ -3,7 +3,7 @@ import { app } from "electron";
 import os from "os";
 import "src-electron/handlers";
 import { getDb } from "src-electron/database/db-provider";
-import { createWindow } from "src-electron/electron-window";
+import { createWindow, handleActivate } from "src-electron/electron-window";
 
 // needed in case process is undefined under Linux
 const platform = process.platform || os.platform();
@@ -23,8 +23,4 @@ app.on("window-all-closed", () => {
   }
 });
 
-app.on("activate", () => {
-  if (mainWindow === null) {
-    createWindow();
-  }
-});
+app.on("activate", handleActivate);

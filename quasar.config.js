@@ -92,6 +92,19 @@ module.exports = configure(function (/* ctx */) {
           timeout: 3000,
           actions: [{ icon: "close", handler: () => {}, color: "white" }],
         },
+        brand: {
+          primary: "#fa534d",
+          secondary: "#fdf7d7",
+          accent: "#9C27B0",
+
+          dark: "#1d1d1d",
+          "dark-page": "#262525",
+
+          positive: "#21BA45",
+          negative: "#a60316",
+          info: "#31CCEC",
+          warning: "#F2C037",
+        },
       },
 
       // iconSet: 'material-icons', // Quasar icon set

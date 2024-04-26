@@ -11,7 +11,7 @@
           @click="toggleLeftDrawer"
         />
 
-        <q-toolbar-title> MuseVE </q-toolbar-title>
+        <q-toolbar-title> Kulturium </q-toolbar-title>
 
         <div>v{{ appVersion }}</div>
       </q-toolbar>

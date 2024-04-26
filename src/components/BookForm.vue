@@ -15,6 +15,7 @@
         @click="handleLock"
       />
       <q-input
+        filled
         class="col-2"
         v-model="book.id"
         label="Registro"
@@ -26,6 +27,7 @@
     </div>
     <div class="row q-gutter-sm q-my-sm justify-between">
       <q-input
+        filled
         class="col"
         v-model="book.title"
         label="Título"
@@ -35,21 +37,33 @@
         :readonly="readonly"
       ></q-input>
 
-      <AutorSelect class="col-5" v-model="book.author" :readonly="readonly" />
+      <AutorSelect
+        filled
+        class="col-5"
+        v-model="book.author"
+        :readonly="readonly"
+      />
     </div>
 
     <div class="row q-gutter-sm q-my-sm justify-between">
       <PublisherSelect
+        filled
         class="col-5"
         v-model="book.publisher"
         :readonly="readonly"
       />
 
-      <ClassSelect class="col" v-model="book.class" :readonly="readonly" />
+      <ClassSelect
+        filled
+        class="col"
+        v-model="book.class"
+        :readonly="readonly"
+      />
     </div>
 
     <div class="row q-gutter-sm q-my-sm">
       <q-input
+        filled
         class="col"
         type="number"
         v-model="book.edition"
@@ -60,6 +74,7 @@
       ></q-input>
 
       <q-input
+        filled
         class="col"
         type="number"
         v-model="book.volume"
@@ -70,6 +85,7 @@
       ></q-input>
 
       <q-input
+        filled
         class="col"
         type="number"
         v-model="book.year"
@@ -84,6 +100,7 @@
       ></q-input>
 
       <q-input
+        filled
         class="col-4"
         type="number"
         v-model="book.num_pages"
@@ -96,6 +113,7 @@
 
     <div class="row q-gutter-sm q-my-sm">
       <q-input
+        filled
         class="col"
         type="text"
         v-model="book.isbn"
@@ -106,6 +124,7 @@
       ></q-input>
 
       <q-input
+        filled
         class="col"
         type="text"
         v-model="book.cdd"
@@ -116,6 +135,7 @@
       ></q-input>
 
       <q-input
+        filled
         class="col"
         type="text"
         v-model="book.cdu"

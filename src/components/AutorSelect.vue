@@ -1,5 +1,6 @@
 <template>
   <q-select
+    :filled="filled"
     :selected="value"
     use-input
     hide-selected
@@ -49,6 +50,10 @@ export default {
       default: "",
     },
     readonly: {
+      type: Boolean,
+      default: false,
+    },
+    filled: {
       type: Boolean,
       default: false,
     },
