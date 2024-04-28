@@ -1,6 +1,10 @@
 <template>
   <q-page class="flex flex-center flex-column">
-    <q-icon name="museum" size="10rem" color="primary" />
+    <img
+      alt="Home logo"
+      src="~assets/home.png"
+      style="width: 850px; height: 500px"
+    />
   </q-page>
 </template>
 
@@ -9,3 +13,4 @@ export default {
   name: "IndexPage",
 };
 </script>
+px
