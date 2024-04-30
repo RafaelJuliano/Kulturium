@@ -1,8 +1,10 @@
-# Quasar App (quasar-project)
+# Kulturium
 
-A Quasar Project
+Kulturium is a cataloging system developed for managing museum pieces at the Casa Da Cultura Polonesa De. Karol Dworaczek
 
-## Install the dependencies
+## How to start
+
+### Install the dependencies
 ```bash
 yarn
 # or
@@ -11,7 +13,7 @@ npm install
 
 ### Start the app in development mode (hot-code reloading, error reporting, etc.)
 ```bash
-quasar dev
+npm run dev:electron
 ```
 
 
@@ -34,7 +36,7 @@ npm run format
 
 ### Build the app for production
 ```bash
-quasar build
+npm run build:electron
 ```
 
 ### Customize the configuration
