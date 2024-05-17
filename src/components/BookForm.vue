@@ -145,6 +145,73 @@
       ></q-input>
     </div>
 
+    <q-expansion-item
+      v-if="isUpdate"
+      label="Fotos"
+      header-class="text-primary text-h6"
+    >
+      <div class="q-px-xl q-py-sm">
+        <q-carousel
+          swipeable
+          animated
+          arrows
+          v-model="slide"
+          v-model:fullscreen="fullscreen"
+          control-color="primary"
+          infinite
+        >
+          <q-carousel-slide
+            class="uncropped-image"
+            v-for="image in images"
+            :key="image.id"
+            :name="image.id"
+            :img-src="image.path"
+          >
+          </q-carousel-slide>
+
+          <template v-slot:control>
+            <q-carousel-control position="bottom-right" :offset="[18, 18]">
+              <q-btn
+                push
+                round
+                dense
+                color="white"
+                text-color="primary"
+                :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
+                @click="fullscreen = !fullscreen"
+              ></q-btn>
+            </q-carousel-control>
+            <q-carousel-control
+              v-if="!fullscreen && !readonly"
+              position="bottom-left"
+              :offset="[18, 18]"
+            >
+              <q-btn
+                class="q-mr-sm"
+                push
+                round
+                dense
+                color="white"
+                text-color="primary"
+                icon="add"
+                @click="console.log(slide)"
+              ></q-btn>
+              <q-btn
+                push
+                round
+                dense
+                color="red"
+                text-color="white"
+                icon="delete_forever"
+                @click="console.log(slide)"
+              ></q-btn>
+            </q-carousel-control>
+          </template>
+        </q-carousel>
+      </div>
+    </q-expansion-item>
+    <q-separator color="primary" spaced="sm"></q-separator>
+
     <div>
       <slot></slot>
     </div>
@@ -233,6 +300,13 @@ export default {
       },
       myForm: null,
       isIdDisabled: true,
+      images: [
+        { id: "1", path: "src/assets/mountains.jpg" },
+        { id: "2", path: "src/assets/parallax1.jpg" },
+        { id: "3", path: "src/assets/home.png" },
+      ],
+      slide: "1",
+      fullscreen: false,
     };
   },
 
@@ -297,3 +371,11 @@ export default {
   },
 };
 </script>
+
+<style>
+.uncropped-image {
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-color: #fff;
+}
+</style>
