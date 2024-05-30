@@ -72,6 +72,7 @@
           class="q-my-sm"
           :factory="factory"
           multiple
+          batch
           style="width: 100%"
         ></q-uploader>
       </q-card-section>

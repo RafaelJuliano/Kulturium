@@ -47,4 +47,7 @@ export default {
   async downloadBooks(type = "xlsx") {
     return safeIpcInvoke(CHANNELS.BOOKS.DOWNLOAD, type);
   },
+  async saveImages(bookId, filesPaths) {
+    return safeIpcInvoke(CHANNELS.BOOKS.SAVE_IMAGES, bookId, filesPaths);
+  },
 };

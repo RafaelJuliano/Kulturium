@@ -301,11 +301,12 @@ export default {
     async getId() {
       return this.initialData?.id || (await window.booksApi.getSequence()) + 1;
     },
-    checkSequence(id) {
+    checkSequence() {
       return window.booksApi.checkSequence(this.book.id);
     },
-    onAddImage(images) {
-      console.log(images);
+    async onAddImage(images) {
+      const paths = images.map((image) => image.path);
+      await window.booksApi.saveImages(this.book.id, paths);
     },
     onDeleteImage(id) {
       console.log("delete image: ", id);

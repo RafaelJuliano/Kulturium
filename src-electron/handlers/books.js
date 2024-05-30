@@ -12,6 +12,7 @@ import {
   importBook,
   downloadCsvExample,
   downloadBooks,
+  saveImages,
 } from "src-electron/services/books";
 
 export default {
@@ -27,4 +28,5 @@ export default {
   [CHANNELS.BOOKS.IMPORT]: importBook,
   [CHANNELS.BOOKS.DOWNLOAD_CSV_EXAMPLE]: downloadCsvExample,
   [CHANNELS.BOOKS.DOWNLOAD]: downloadBooks,
+  [CHANNELS.BOOKS.SAVE_IMAGES]: saveImages,
 };

@@ -10,6 +10,7 @@ import { deleteBook } from "./deleteBook";
 import { importBook } from "./importBooks";
 import { downloadCsvExample } from "./downloadCsvExample";
 import { downloadBooks } from "./downloadBooks";
+import { saveImages } from "./saveImages";
 
 export {
   save,
@@ -24,4 +25,5 @@ export {
   importBook,
   downloadCsvExample,
   downloadBooks,
+  saveImages,
 };
