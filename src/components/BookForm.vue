@@ -145,71 +145,13 @@
       ></q-input>
     </div>
 
-    <q-expansion-item
+    <ImageCarousel
       v-if="isUpdate"
-      label="Fotos"
-      header-class="text-primary text-h6"
-    >
-      <div class="q-px-xl q-py-sm">
-        <q-carousel
-          swipeable
-          animated
-          arrows
-          v-model="slide"
-          v-model:fullscreen="fullscreen"
-          control-color="primary"
-          infinite
-        >
-          <q-carousel-slide
-            class="uncropped-image"
-            v-for="image in images"
-            :key="image.id"
-            :name="image.id"
-            :img-src="image.path"
-          >
-          </q-carousel-slide>
-
-          <template v-slot:control>
-            <q-carousel-control position="bottom-right" :offset="[18, 18]">
-              <q-btn
-                push
-                round
-                dense
-                color="white"
-                text-color="primary"
-                :icon="fullscreen ? 'fullscreen_exit' : 'fullscreen'"
-                @click="fullscreen = !fullscreen"
-              ></q-btn>
-            </q-carousel-control>
-            <q-carousel-control
-              v-if="!fullscreen && !readonly"
-              position="bottom-left"
-              :offset="[18, 18]"
-            >
-              <q-btn
-                class="q-mr-sm"
-                push
-                round
-                dense
-                color="white"
-                text-color="primary"
-                icon="add"
-                @click="console.log(slide)"
-              ></q-btn>
-              <q-btn
-                push
-                round
-                dense
-                color="red"
-                text-color="white"
-                icon="delete_forever"
-                @click="console.log(slide)"
-              ></q-btn>
-            </q-carousel-control>
-          </template>
-        </q-carousel>
-      </div>
-    </q-expansion-item>
+      :readonly="readonly"
+      :images="images"
+      :onAdd="onAddImage"
+      :onDelete="onDeleteImage"
+    />
     <q-separator color="primary" spaced="sm"></q-separator>
 
     <div>
@@ -222,6 +164,7 @@
 import AutorSelect from "src/components/AutorSelect.vue";
 import PublisherSelect from "src/components/PublisherSelect.vue";
 import ClassSelect from "src/components/ClassSelect.vue";
+import ImageCarousel from "src/components/ImageCarousel.vue";
 
 export default {
   name: "BookForm",
@@ -230,6 +173,7 @@ export default {
     AutorSelect,
     PublisherSelect,
     ClassSelect,
+    ImageCarousel,
   },
 
   props: {
@@ -305,8 +249,6 @@ export default {
         { id: "2", path: "src/assets/parallax1.jpg" },
         { id: "3", path: "src/assets/home.png" },
       ],
-      slide: "1",
-      fullscreen: false,
     };
   },
 
@@ -362,6 +304,12 @@ export default {
     checkSequence(id) {
       return window.booksApi.checkSequence(this.book.id);
     },
+    onAddImage(images) {
+      console.log(images);
+    },
+    onDeleteImage(id) {
+      console.log("delete image: ", id);
+    },
   },
 
   watch: {
@@ -371,11 +319,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.uncropped-image {
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-color: #fff;
-}
-</style>
